@@ -37,7 +37,7 @@ bool RandomNumberGeneratorType::getBoolean(int scaleMax)
 // returns true only when random value is above the threshold
 bool RandomNumberGeneratorType::getBoolean(int scaleMax, int positiveThreshold)
 {
-    assert(positiveThreshold < scaleMax && positiveThreshold >= 0);
+    //assert(positiveThreshold < scaleMax && positiveThreshold >= 0);
     return getInteger(scaleMax) > positiveThreshold;
 }
 

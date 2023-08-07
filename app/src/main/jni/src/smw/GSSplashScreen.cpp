@@ -86,7 +86,7 @@ bool LoadStartGraphics()
     //load basic stuff
     loadok &= gfx_loadimagenocolorkey(&rm->menu_backdrop, convertPath("gfx/packs/menu/menu_background.png", graphicspack));
     loadok &= gfx_loadimage(&rm->menu_smw, convertPath("gfx/packs/menu/menu_smw.png", graphicspack), false);
-    loadok &= gfx_loadimage(&rm->menu_version, convertPath("gfx/packs/menu/menu_version.png", graphicspack), false);
+    //loadok &= gfx_loadimage(&rm->menu_version, convertPath("gfx/packs/menu/menu_version.png", graphicspack), false);
 
     if (!loadok) {
         _load_drawmsg("ERROR: error loading the start graphics!\n");
@@ -207,16 +207,17 @@ void SplashScreenState::update()
         game_values.playerInput.Update(loop_event, 1);
     }
 
-    for (int iPlayer = 0; iPlayer < 4; iPlayer++) {
-        if (game_values.playerInput.outputControls[iPlayer].menu_select.fPressed ||
-            game_values.playerInput.outputControls[iPlayer].menu_cancel.fPressed ||
-            game_values.playerInput.outputControls[iPlayer].menu_random.fPressed) {
+    //for (int iPlayer = 0; iPlayer < 4; iPlayer++) {
+        //if (game_values.playerInput.outputControls[iPlayer].menu_select.fPressed ||
+            //game_values.playerInput.outputControls[iPlayer].menu_cancel.fPressed ||
+            //game_values.playerInput.outputControls[iPlayer].menu_random.fPressed) {
             //if (state <= 6)
             //{
             //  state = 6;
             //  alpha = 255;
             //}
             //else
+            if (state == 8)
             {
                 blitdest = rm->menu_backdrop.getSurface();
                 rm->menu_shade.setalpha(smw->MenuTransparency);
@@ -234,8 +235,8 @@ void SplashScreenState::update()
                 GameStateManager::instance().changeStateTo(&MenuState::instance());
                 return;
             }
-        }
-    }
+        //}
+    //}
 
     //if (state == 0 || state == 3)
     //{
@@ -293,11 +294,11 @@ void SplashScreenState::update()
         rm->menu_smw.setalpha((Uint8)alpha);
         rm->menu_smw.draw(smw->ScreenWidth/2 - ((short)rm->menu_smw.getWidth() >> 1), 30);  //smw logo
 
-        rm->menu_version.setalpha((Uint8)alpha);
-        rm->menu_version.draw(628 - rm->menu_version.getWidth(), 10); //smw logo
+        //rm->menu_version.setalpha((Uint8)alpha);
+        //rm->menu_version.draw(628 - rm->menu_version.getWidth(), 10); //smw logo
 
         rm->menu_font_large.setalpha((Uint8)alpha);
-        rm->menu_font_large.drawRightJustified(smw->ScreenWidth * 0.98f, 45, "WIP");
+        //rm->menu_font_large.drawRightJustified(smw->ScreenWidth * 0.98f, 45, "WIP");
 
         menu_credits->setalpha((Uint8)alpha);
         menu_credits->draw(227, 200);
@@ -306,7 +307,7 @@ void SplashScreenState::update()
     if (state == 7) {
 //            _load_drawmsg("Loading...");
         rm->menu_font_large.drawCentered(smw->ScreenWidth/2, smw->ScreenHeight * 0.875f, "Loading...");
-    } else if (state == 8) {
+    } /*else if (state == 8) {
 //            _load_drawmsg("Press Any Key To Continue");
         rm->menu_font_large.drawCentered(smw->ScreenWidth/2, smw->ScreenHeight * 0.875f, "Press Any Key To Continue");
 
@@ -314,7 +315,7 @@ void SplashScreenState::update()
         eyecandy[2].update();
         eyecandy[2].draw();
 
-        /*          static int timer = 60;
+                  static int timer = 60;
                     static int index = 0;
                     if (++timer >= 60)
                     {
@@ -323,8 +324,8 @@ void SplashScreenState::update()
 
                         if (++index >= NUM_CONTRIBUTORS)
                             index = 0;
-                    } */
-    }
+                    }
+    }*/
 
     // Only start loading after we displayed something, in the 2nd frame
     if (firstFrame) {
@@ -350,7 +351,7 @@ void SplashScreenState::update()
         maplist->ReadFilters();
         maplist->ApplyFilters(game_values.pfFilters);
 
-        ifSoundOnPlay(rm->sfx_coin);
+        //ifSoundOnPlay(rm->sfx_coin);
 
 
         state++;

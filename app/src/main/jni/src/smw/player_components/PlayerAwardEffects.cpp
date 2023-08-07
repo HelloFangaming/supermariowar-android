@@ -16,26 +16,26 @@ extern CEyecandyContainer eyecandy[3];
 extern void CheckSecret(short id);
 
 struct STextAward {
-    const char      *name;
-    gfxFont         *font;
+    const char *name;
+    bool large = false;
 
-    STextAward(const char *nname, gfxFont *nfont) {
+    STextAward(const char *nname, bool nlarge) {
         name = nname;
-        font = nfont;
+        large = nlarge;
     }
 };
 
 #define PAWARD_LAST     9
 const STextAward awardtexts[PAWARD_LAST] = {
-    STextAward("Double Kill", &rm->game_font_small),
-    STextAward("Triple Kill", &rm->game_font_small),
-    STextAward("Killing Spree",  &rm->game_font_small),
-    STextAward("Killing Spree x 2", &rm->game_font_small),
-    STextAward("Killing Spree x 3", &rm->game_font_small),
-    STextAward("Dominating", &rm->game_font_large),
-    STextAward("Dominating x 2", &rm->game_font_large),
-    STextAward("Dominating x 3", &rm->game_font_large),
-    STextAward("Unstoppable!", &rm->game_font_large)
+        STextAward("Double Kill", false),
+        STextAward("Triple Kill", false),
+        STextAward("Killing Spree",  false),
+        STextAward("Killing Spree x 2", false),
+        STextAward("Killing Spree x 3", false),
+        STextAward("Dominating", true),
+        STextAward("Dominating x 2", true),
+        STextAward("Dominating x 3", true),
+        STextAward("Unstoppable!", true)
 };
 
 void PlayerAwardEffects::drawRingAward(CPlayer& player)
@@ -138,10 +138,10 @@ void PlayerAwardEffects::addDeathAward(CPlayer& player)
         addExploding(player);
     else if (game_values.awardstyle == award_style_souls && player.killsinrow >= MINAWARDSNEEDED)
         eyecandy[2].add(new EC_SoulsAward(&rm->spr_awardsouls,
-            &rm->spr_awardsoulspawn,
-            player.centerX(), player.centerY(),
-            60, 9.0f,
-            player.killsinrow, awards));
+                                          &rm->spr_awardsoulspawn,
+                                          player.centerX(), player.centerY(),
+                                          60, 9.0f,
+                                          player.killsinrow, awards));
 
     player.killsinrow = 0;
     player.killsinrowinair = 0;
@@ -232,7 +232,7 @@ void PlayerAwardEffects::addKillerAward(CPlayer& killer, CPlayer* killed, killst
                 sprintf(text, "%d - %s", killer.killsinrow, awardtexts[awardIndex].name);
 
                 //now add the eyecandy
-                eyecandy[2].add(new EC_GravText(awardtexts[awardIndex].font, killer.centerX(), killer.bottomY(), text, -VELJUMP));
+                eyecandy[2].add(new EC_GravText(awardtexts[awardIndex].large ? &rm->game_font_large : &rm->game_font_small, killer.centerX(), killer.bottomY(), text, -VELJUMP));
             }
 
             //if we stopped the other players run show another award
@@ -241,7 +241,7 @@ void PlayerAwardEffects::addKillerAward(CPlayer& killer, CPlayer* killed, killst
                 char text[128];
                 sprintf(text, "%s Stopped!",  awardtexts[a].name);
 
-                eyecandy[2].add(new EC_GravText(awardtexts[a].font, killed->centerX(), killed->bottomY(), text, -VELJUMP*1.3f));
+                eyecandy[2].add(new EC_GravText(awardtexts[a].large ? &rm->game_font_large : &rm->game_font_small, killed->centerX(), killed->bottomY(), text, -VELJUMP*1.3f));
             }
         }
     }
@@ -256,11 +256,11 @@ void PlayerAwardEffects::addKillsInRowInAirAward(CPlayer& player)
         float awardvely = vel * sin(angle);
 
         eyecandy[2].add(new EC_FallingObject(&rm->spr_bonus,
-            player.centerX() - 8,
-            player.centerY() - 8,
-            awardvelx, awardvely,
-            4, 2, 0,
-            player.getColorID() * 16, 16, 16));
+                                             player.centerX() - 8,
+                                             player.centerY() - 8,
+                                             awardvelx, awardvely,
+                                             4, 2, 0,
+                                             player.getColorID() * 16, 16, 16));
         angle -= (float)PI / 14;
     }
 

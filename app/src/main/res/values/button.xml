@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="TouchButton" parent ="android:Widget.ImageButton">
+        <item name="android:background">@color/controller_invisible</item>
+        <item name="android:src">@drawable/action_usual</item>
+        <item name="android:state_pressed">@drawable/action_pressed</item>
+    </style>
+</resources>

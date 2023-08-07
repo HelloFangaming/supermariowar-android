@@ -3,11 +3,11 @@
 
     <dimen name="size_start_select_background">150dp</dimen>
 
-    <dimen name="size_action_button_background">150dp</dimen>
-    <dimen name="size_action_button_item">50dp</dimen>
+    <dimen name="size_action_button_background">175dp</dimen>
+    <dimen name="size_action_button_item">70dp</dimen>
 
-    <dimen name="size_direction_button_background">150dp</dimen>
-    <dimen name="size_direction_button_item">50dp</dimen>
+    <dimen name="size_direction_button_background">175dp</dimen>
+    <dimen name="size_direction_button_item">75dp</dimen>
 
     <integer name="vector_stroke_width">2</integer>
     <integer name="background_viewportsize">100</integer>

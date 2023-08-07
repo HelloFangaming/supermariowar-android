@@ -6,9 +6,11 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.andretietz.android.controller.ActionView;
+import com.andretietz.android.controller.DirectionView;
 import com.andretietz.android.controller.InputView;
 import com.andretietz.android.controller.StartSelectView;
 
@@ -25,6 +27,8 @@ public class MainActivity extends SDLActivity implements InputView.InputEventLis
 
         super.onCreate(savedInstanceState);
 
+        //Old controller
+        /*
         getLayoutInflater().inflate(R.layout.controller, mLayout, true);
         controllerView = mLayout.findViewById(R.id.controller);
 
@@ -34,27 +38,144 @@ public class MainActivity extends SDLActivity implements InputView.InputEventLis
         inputView.setOnButtonListener(this);
         StartSelectView startSelectView = findViewById(R.id.viewStartSelect);
         startSelectView.setOnButtonListener(this);
+        */
+
+        //Improved controller
+        getLayoutInflater().inflate(R.layout.controller_improved, mLayout, true);
+        controllerView = mLayout.findViewById(R.id.controller_improved);
+
+        //D Pad
+        InputView inputView = findViewById(R.id.viewDpad);
+        inputView.setOnButtonListener(this);
+
+        //Quit Button
+        findViewById(R.id.buttonQuit).setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                switch(event.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        // PRESSED
+                        keyEvent(BUTTON_SELECT, true);
+                        ((ImageButton)v).setImageResource(R.drawable.action_pressed);
+                        break;
+                    case MotionEvent.ACTION_UP:
+                        // RELEASED
+                        keyEvent(BUTTON_SELECT, false);
+                        ((ImageButton)v).setImageResource(R.drawable.action_usual);
+                        break;
+                }
+                return false;
+            }
+        });
+
+        //Start Button
+        findViewById(R.id.buttonStart).setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                switch(event.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        // PRESSED
+                        keyEvent(BUTTON_START, true);
+                        ((ImageButton)v).setImageResource(R.drawable.action_pressed);
+                        break;
+                    case MotionEvent.ACTION_UP:
+                        // RELEASED
+                        keyEvent(BUTTON_START, false);
+                        ((ImageButton)v).setImageResource(R.drawable.action_usual);
+                        break;
+                }
+                return false;
+            }
+        });
+
+        //Jump Button
+        findViewById(R.id.buttonJump).setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                switch(event.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        // PRESSED
+                        keyEvent(BUTTON_RIGHT, true);
+                        ((ImageButton)v).setImageResource(R.drawable.action_pressed);
+                        break;
+                    case MotionEvent.ACTION_UP:
+                        // RELEASED
+                        keyEvent(BUTTON_RIGHT, false);
+                        ((ImageButton)v).setImageResource(R.drawable.action_usual);
+                        break;
+                }
+                return false;
+            }
+        });
+
+        //Run Button (Tap one to run, tap again to stop running)
+        findViewById(R.id.buttonRun).setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                switch(event.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        runToggle = !runToggle;
+                        // PRESSED
+                        if (runToggle) {
+                            keyEvent(BUTTON_LEFT, true);
+                            ((ImageButton) v).setImageResource(R.drawable.action_pressed);
+                        }
+                        // RELEASED
+                        else
+                        {
+                            keyEvent(BUTTON_LEFT, false);
+                            ((ImageButton)v).setImageResource(R.drawable.action_usual);
+                        }
+                        break;
+                }
+                return false;
+            }
+        });
+
+        //Inventory Button
+        findViewById(R.id.buttonInventory).setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                switch(event.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        // PRESSED
+                        keyEvent(BUTTON_UP, true);
+                        ((ImageButton)v).setImageResource(R.drawable.action_pressed);
+                        break;
+                    case MotionEvent.ACTION_UP:
+                        // RELEASED
+                        keyEvent(BUTTON_UP, false);
+                        ((ImageButton)v).setImageResource(R.drawable.action_usual);
+                        break;
+                }
+                return false;
+            }
+        });
+
         mLayout.removeView(controllerView);
 
         if(getPackageManager().hasSystemFeature("android.hardware.touchscreen"))
-            Toast.makeText(this, "Tap the top half of the screen to display the on-screen controller.", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Tap the screen to display the on-screen controller.", Toast.LENGTH_LONG).show();
     }
 
-    long lastTouch = -1;
+    boolean runToggle = false;
+
+    //long lastTouch = -1;
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
-        if(System.currentTimeMillis() <= lastTouch + 500)
-            return super.dispatchTouchEvent(ev);
+        //if(System.currentTimeMillis() <= lastTouch + 500)
+            //return super.dispatchTouchEvent(ev);
 
-        lastTouch = System.currentTimeMillis();
-        if (ev.getY() < getWindowManager().getDefaultDisplay().getHeight() / 2) {
-            if(controllerView != null) {
-                if(controllerView.getParent() != null)
-                    mLayout.removeView(controllerView);
-                else
+        //lastTouch = System.currentTimeMillis();
+        //if (ev.getY() < getWindowManager().getDefaultDisplay().getHeight() / 2) {
+            //if(controllerView != null) {
+                //if(controllerView.getParent() != null)
+                    //mLayout.removeView(controllerView);
+                //else
+                if(controllerView.getParent() == null) {
                     mLayout.addView(controllerView);
             }
-        }
+        //}
 
         return super.dispatchTouchEvent(ev);
     }
@@ -108,7 +229,14 @@ public class MainActivity extends SDLActivity implements InputView.InputEventLis
 
     @Override
     public void onInputEvent(View view, int buttons) {
+        //D Pad
+        keyEvent(LEFT, ((buttons&0xff)== DirectionView.DIRECTION_LEFT)||((buttons&0xff)== DirectionView.DIRECTION_DOWN_LEFT)||((buttons&0xff)== DirectionView.DIRECTION_UP_LEFT));
+        keyEvent(RIGHT, ((buttons&0xff)== DirectionView.DIRECTION_RIGHT)||((buttons&0xff)== DirectionView.DIRECTION_DOWN_RIGHT)||((buttons&0xff)== DirectionView.DIRECTION_UP_RIGHT));
+        keyEvent(UP, ((buttons&0xff)== DirectionView.DIRECTION_UP)||((buttons&0xff)== DirectionView.DIRECTION_UP_LEFT)||((buttons&0xff)== DirectionView.DIRECTION_UP_RIGHT));
+        keyEvent(DOWN, ((buttons&0xff)== DirectionView.DIRECTION_DOWN)||((buttons&0xff)== DirectionView.DIRECTION_DOWN_RIGHT)||((buttons&0xff)== DirectionView.DIRECTION_DOWN_LEFT));
+        /* Old Controller
         switch(view.getId()) {
+         /*
             case R.id.viewDirection:
                 keyEvent(LEFT, (16 & buttons) > 0);
                 keyEvent(RIGHT, (1 & buttons) > 0);
@@ -126,6 +254,7 @@ public class MainActivity extends SDLActivity implements InputView.InputEventLis
                 keyEvent(BUTTON_SELECT, (2 & buttons) > 0);
                 break;
         }
+        */
     }
 
     private void keyEvent(int key, boolean pressed) {

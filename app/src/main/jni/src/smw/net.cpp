@@ -178,14 +178,14 @@ void net_close()
 
 void net_saveServerList()
 {
-    NetConfigManager config;
-    config.save();
+    //NetConfigManager config;
+    //config.save();
 }
 
 void net_loadServerList()
 {
-    NetConfigManager config;
-    config.load();
+    //NetConfigManager config;
+    //config.load();
 }
 
 /****************************

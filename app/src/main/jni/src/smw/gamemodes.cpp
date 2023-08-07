@@ -1205,7 +1205,7 @@ void CGM_ShyGuyTag::FreeShyGuys()
 
 short CGM_ShyGuyTag::CheckWinner(CPlayer * player)
 {
-    if (gameover)
+    if (gameover || goal == -1)
         return player_kill_normal;
 
     if (player->Score().score >= goal) {
@@ -2043,7 +2043,7 @@ short CGM_Stomp::CheckWinner(CPlayer * player)
         ShowScoreBoard();
         RemovePlayersButTeam(winningteam);
         return player_kill_removed;
-    } else if (player->Score().score >= goal - 2 && !playedwarningsound) {
+    } else if (player->Score().score >= goal - (goal / 10) && !playedwarningsound) {
         playwarningsound();
     }
 
@@ -3199,6 +3199,7 @@ bool CGM_Boss_MiniGame::SetWinner(CPlayer * player)
     }
 
     SetupScoreBoard(false);
+    ShowScoreBoard();
 
     if (game_values.music) {
         ifsoundonstop(rm->sfx_invinciblemusic);

@@ -457,6 +457,7 @@ CMap::CMap()
     , animatedBackmapSurface(nullptr)
     , animatedTilesSurface(nullptr)
     , iAnimatedTileCount(0)
+    , numwarpexits(0)
 {}
 
 CMap::~CMap()
@@ -1428,12 +1429,7 @@ void CMap::saveThumbnail(const std::string &sFile, bool fUseClassicPack)
         return;
 
     //Save the screenshot with the same name as the map file
-
-#ifdef PNG_SAVE_FORMAT
     IMG_SavePNG(sThumbnail, sFile.c_str());
-#else
-    SDL_SaveBMP(sThumbnail, sFile.c_str());
-#endif
 
     SDL_FreeSurface(sThumbnail);
 }

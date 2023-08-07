@@ -7,6 +7,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.AssetManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -32,7 +33,7 @@ public class Downloader extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if(getExternalFilesDir(null).listFiles(new FileFilter() {
+        /*if(getExternalFilesDir(null).listFiles(new FileFilter() {
                     @Override
                     public boolean accept(File pathname) {
                         return pathname.isDirectory();
@@ -41,9 +42,25 @@ public class Downloader extends Activity {
             startActivity(new Intent(this, MainActivity.class));
             finish();
             return;
-        }
+        }*/
 
-        AlertDialog.Builder adb = new AlertDialog.Builder(this);
+        //Unzip file from assets folder
+        File dataDirectory = new File(getExternalFilesDir(null).getAbsolutePath() + "/supermariowar/");
+        File[] contents = dataDirectory.listFiles();
+        if (!(dataDirectory.exists())||(contents.length == 0)) {
+            try {
+                InputStream data = getAssets().open("data.zip");
+                Decompress unzip = new Decompress(Downloader.this, data, getExternalFilesDir(null).getAbsolutePath() + "/supermariowar/");
+                unzip.unzip();
+            }
+            catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        startActivity(new Intent(this, MainActivity.class));
+        finish();
+
+        /*AlertDialog.Builder adb = new AlertDialog.Builder(this);
         adb.setTitle("Additional Files Required");
         adb.setMessage("To run Super Mario War an additional 12.5MB of files need to be downloaded.");
         adb.setPositiveButton("OK", new DialogInterface.OnClickListener() {
@@ -54,7 +71,7 @@ public class Downloader extends Activity {
             public void onClick(DialogInterface dialog, int which) {
                 finish();
             } });
-        adb.show();
+        adb.show();*/
     }
 
     private void downloadFiles() {
@@ -63,7 +80,7 @@ public class Downloader extends Activity {
         progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
         progressDialog.show();
 
-        String url = "https://github.com/mmatyas/supermariowar/raw/master/data.zip";
+        String url = "https://github.com/Zathki/supermariowar-android/raw/master/data.zip";
         DownloadFileAsync download = new DownloadFileAsync(getExternalFilesDir(null).getAbsolutePath() + "/data.zip", this, new DownloadFileAsync.ProgressUpdate() {
             @Override
             public void downloadProgress(int progress) {
@@ -174,6 +191,14 @@ public class Downloader extends Activity {
         public Decompress(Context context, File zipFile, String rootLocation) {
             this.rootLocation = rootLocation;
             _zipFile = zipFile;
+            this.context = context;
+
+            _dirChecker("");
+        }
+
+        public Decompress(Context context, InputStream zipFile, String rootLocation) {
+            this.rootLocation = rootLocation;
+            _zipFileStream = zipFile;
             this.context = context;
 
             _dirChecker("");

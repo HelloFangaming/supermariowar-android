@@ -26,7 +26,7 @@ CPlayerInput::CPlayerInput() {
 
 	//left, right, jump, down, turbo, powerup, start, cancel
 	touchControlsGame = new CInputControl();
-    int gameKeys[] = {14, 15, 1, 13, 3, 4, 7, 5};
+    int gameKeys[] = {14, 15, 2, 13, 3, 4, 7, 5};
 	for (short iKey = 0; iKey < NUM_KEYS; iKey++) {
 		touchControlsGame->keys[iKey] = gameKeys[iKey] + JOY_BUTTON_START - 1;
 	}

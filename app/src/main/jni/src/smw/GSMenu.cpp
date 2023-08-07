@@ -531,7 +531,7 @@ void MenuState::update()
             }
         }
     }
-
+/*
     //Watch for the konami code to unlock the minigames match type
     if (!game_values.minigameunlocked && mCurrentMenu == mMatchSelectionMenu) {
         if (!mCurrentMenu->GetCurrentControl()->IsModifying()) {
@@ -563,7 +563,7 @@ void MenuState::update()
             }
         }
     }
-
+*/
 #ifdef _DEBUG
     if (g_fAutoTest)
         GetNextScriptOperation();
@@ -1471,14 +1471,11 @@ void MenuState::update()
             char * pszThumbnail = szThumbnail + strlen(szThumbnail);
             GetNameFromFileName(pszThumbnail, (*itr).second->filename.c_str());
 
-#ifdef PNG_SAVE_FORMAT
             strcat(szThumbnail, ".png");
-#else
-            strcat(szThumbnail, ".bmp");
-#endif
+
 
             g_map->loadMap((*itr).second->filename, read_type_preview);
-            g_map->saveThumbnail(szThumbnail, false);
+            g_map->saveThumbnail(convertPath(szThumbnail), false);
 
             itr++;
         }
@@ -1492,12 +1489,13 @@ bool MenuState::ReadTourFile()
     ResetTourStops();
 
     FILE * fp = fopen(tourlist->GetIndex(game_values.tourindex), "r");
+    const char* const ignorable_leads = " #\n\r\t";
 
     char buffer[256];
     bool fReadVersion = false;
     int32_t iVersion[4] = {0, 0, 0, 0};
     while (fgets(buffer, 256, fp) && game_values.tourstoptotal < 10) {
-        if (buffer[0] == '#' || buffer[0] == '\n' || buffer[0] == ' ' || buffer[0] == '\t')
+        if (strchr(ignorable_leads, buffer[0]))
             continue;
 
         if (!fReadVersion) {

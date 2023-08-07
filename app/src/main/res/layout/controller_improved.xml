@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/controller_improved"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.andretietz.android.controller.DirectionView
+        android:id="@+id/viewDpad"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        app:diagonal_mode="true" />
+
+    <ImageButton
+        android:id="@+id/buttonQuit"
+        style="@style/TouchButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:background="@color/controller_invisible" />
+
+    <ImageButton
+        android:id="@+id/buttonStart"
+        style="@style/TouchButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp"
+        android:background="@color/controller_invisible" />
+
+    <ImageButton
+        android:id="@+id/buttonJump"
+        style="@style/TouchButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@id/viewDpad"
+        android:layout_alignParentRight="true"
+        android:layout_marginBottom="25dp"
+        android:layout_marginRight="25dp"
+        android:background="@color/controller_invisible"
+        android:scaleX="1.5"
+        android:scaleY="1.5"
+        tools:layout_alignParentBottom="true" />
+
+    <ImageButton
+        android:id="@+id/buttonRun"
+        style="@style/TouchButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@id/viewDpad"
+        android:layout_alignParentRight="true"
+        android:layout_marginBottom="10dp"
+        android:layout_marginRight="115dp"
+        android:background="@color/controller_invisible"
+        tools:layout_alignParentBottom="true" />
+
+    <ImageButton
+        android:id="@+id/buttonInventory"
+        style="@style/TouchButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@id/viewDpad"
+        android:layout_alignParentRight="true"
+        android:layout_marginBottom="115dp"
+        android:layout_marginRight="10dp"
+        android:background="@color/controller_invisible"
+        tools:layout_alignParentBottom="true" />
+
+</RelativeLayout>
