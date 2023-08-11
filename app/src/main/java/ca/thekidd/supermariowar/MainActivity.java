@@ -160,6 +160,21 @@ public class MainActivity extends SDLActivity implements InputView.InputEventLis
 
     boolean runToggle = false;
 
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+
+        if (hasFocus) {
+            //Hide navigation bar
+            int uiOptions = getWindow().getDecorView().getSystemUiVisibility();
+            int newUiOptions = uiOptions;
+            newUiOptions ^= View.SYSTEM_UI_FLAG_HIDE_NAVIGATION;
+            newUiOptions ^= View.SYSTEM_UI_FLAG_FULLSCREEN;
+            newUiOptions ^= View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
+            getWindow().getDecorView().setSystemUiVisibility(newUiOptions);
+        }
+    }
+
     //long lastTouch = -1;
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
